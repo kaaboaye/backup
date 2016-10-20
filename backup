@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# -*- coding: utf-8 -*-
+
+#######
+### CONFIG
+#######
+
+user="root"
+group=${user}
+destPerm="600"
+env="/usr/bin/env sudo -u ${user} "
+dest="/backup"
+filename="${dest}/$(date "+%Y-%m-%d_%H-%M-%S").tar.gz"
+targets=(
+    "/home"
+    "/etc"
+    "/srv"
+    "/var/lib"
+    "/var/log"
+    "/var/db"
+    "/var/spool"
+    "/usr/local/bin"
+)
+
+#######
+### EXECUTION
+#######
+
+${env} mkdir -pv ${dest}
+${env} tar -Pzcvf ${filename} ${targets[*]}
+${env} chown ${user}:${group} -R ${dest}
+${env} chmod ${destPerm} -R ${dest}
+${env} echo -e "\n\n####\n"
+${env} echo "Finished"
+${env} echo "   Saved to: ${filename}"
+${env} echo "   Permissions: ${user}:${group} ${destPerm}"
