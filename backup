@@ -27,7 +27,14 @@ targets=(
 #######
 
 ${env} mkdir -pv ${dest}
-${env} tar -Pzcvf ${filename} ${targets[*]}
+
+${env} echo "Packing..."
+${env} tar -zcvf ${filename} ${targets[*]}
+
+${env} echo "Calculating checksum..."
+${env} sha256sum ${filename} > ${filename}.sha256
+
+${env} echo "Setting permissions..."
 ${env} chown ${user}:${group} -R ${dest}
 ${env} chmod ${destPerm} -R ${dest}
 ${env} echo -e "\n\n####\n"
